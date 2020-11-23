@@ -2,11 +2,13 @@ import './App.css';
 import React from "react"
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component"
 import HomePage from "./pages/homePage/homePage"
 import Profile from "./pages/profile/profile.jsx"
 import CardList from "./components/CardList/cardList"
+import Footer from "./components/Footer/Footer"
+import Header from "./components/Header/Header"
 
 class App extends React.Component {
   constructor() {
@@ -111,6 +113,8 @@ class App extends React.Component {
   }
   render() {
     return (
+      <div className="maincontainer">
+      <Header></Header> 
       <div className="App">
         <BrowserRouter>
           <Route exact path="/signin" render={() =>
@@ -126,7 +130,11 @@ class App extends React.Component {
             <Route exact path="/cardlist" render={() => <CardList handleAdultsChange={this.handleAdultsChange} adults={this.state.adults} dateDifferenceNumber={this.dateDifferenceNumber} reservationArray={this.handleReservationArray} favoritesArray={this.handleFavoritesArray} handleSeachButtonClick={this.handleSeachButtonClick} currentUser={this.state.currentUser} cityAndCountry={this.handleCityAndCountry} checkIn={this.handleCheckInChange} checkOut={this.handleCheckOutChange} searchValue={this.handlesearchValueChange} resulsArray={this.state.resulsArray} />} />
           </Switch>
         </BrowserRouter>
+        
+        <Footer/>
       </div>
+      </div>
+      
     );
   }
 }
