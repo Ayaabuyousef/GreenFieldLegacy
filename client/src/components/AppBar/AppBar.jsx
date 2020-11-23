@@ -2,7 +2,7 @@ import React from "react"
 import 'date-fns';
 import { Toolbar, AppBar, IconButton, Typography, Button } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import MenuIcon from '@material-ui/icons/Menu';
+// import MenuIcon from '@material-ui/icons/Menu';
 import "./appBar.css"
 import { Link } from 'react-router-dom';
 import "./appBar.css"
@@ -16,7 +16,7 @@ class AppBarr extends React.Component {
     }
     handleLoginClick = (e) => {
         e.preventDefault()
-        fetch("http://127.0.0.1:5000/signout")
+        fetch("/signout")
             .then(() => {
                 localStorage.removeItem("jwt-auth")
                 localStorage.removeItem("current-user")
@@ -42,7 +42,7 @@ class AppBarr extends React.Component {
                                             Log-out
                                     </Button>
                                         <Link to='/profile' className="mys">
-                                            <IconButton color='inherit' edge="start" aria-label="menu" size="large" m={2}>
+                                            <IconButton color='inherit' edge="start" aria-label="menu" size="medium" m={2}>
                                                 <AccountCircleIcon className="Account" />
                                             </IconButton>
                                         </Link>
