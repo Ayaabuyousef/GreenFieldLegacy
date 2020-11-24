@@ -5,7 +5,6 @@ import HomePage from "./pages/homePage/homePage"
 import Profile from "./pages/profile/profile.jsx"
 import CardList from "./components/CardList/cardList"
 import Footer from "./components/Footer/Footer"
-import Header from "./components/Header/Header"
 import { connect } from 'react-redux';
 import React from "react"
 import './App.css';
@@ -129,8 +128,7 @@ class App extends React.Component {
   render() {
     console.log(this.state)
     return (
-      <div className="maincontainer">
-      <Header></Header> 
+      <div className="maincontainer"> 
       <div className="App">
         <BrowserRouter>
           <Route exact path="/signin" render={() =>
