@@ -8,6 +8,7 @@ import Footer from "./components/Footer/Footer"
 import { connect } from 'react-redux';
 import React from "react"
 import './App.css';
+import Filter from "./components/Filter/Filter";
 
 class App extends React.Component {
   constructor() {
@@ -20,9 +21,22 @@ class App extends React.Component {
       adults: 1,
       resulsArray: [],
       admin: false,
-      cityAndCountry: ""
-    }
+      cityAndCountry: "",
+      
+      
+
+     
+    };
   }
+  // sortProducts(event){
+  //   console.log(event.target.value);
+
+  // }
+  // filterProducts(event){
+  //   console.log(event.target.value);
+  // }
+  
+
 
   //converting the date into numbers
   dateDifferenceNumber = () => {
@@ -70,7 +84,7 @@ class App extends React.Component {
         "headers": {
           // "x-rapidapi-key": "19fe5ca383msh9591c981cf8ec3ap1768e4jsn0d1c67890d8e",
           // "x-rapidapi-host": "hotels4.p.rapidapi.com",
-          "x-rapidapi-key": "d13943b4a2msh2fce0d567fcd48cp1b7894jsn85cca0ffc256",
+          "x-rapidapi-key": "7747b0acebmshe8957ecdd090630p1d3bf9jsn448eb0340be7",
           "x-rapidapi-host": "hotels4.p.rapidapi.com",
           // "useQueryString": true
         }
@@ -86,7 +100,7 @@ class App extends React.Component {
             "headers": {
               // "x-rapidapi-key": "19fe5ca383msh9591c981cf8ec3ap1768e4jsn0d1c67890d8e",
               // "x-rapidapi-host": "hotels4.p.rapidapi.com",
-              "x-rapidapi-key": "d13943b4a2msh2fce0d567fcd48cp1b7894jsn85cca0ffc256",
+              "x-rapidapi-key": "7747b0acebmshe8957ecdd090630p1d3bf9jsn448eb0340be7",
 	            "x-rapidapi-host": "hotels4.p.rapidapi.com"
             }
           })
@@ -130,6 +144,7 @@ class App extends React.Component {
     return (
       <div className="maincontainer"> 
       <div className="App">
+        
         <BrowserRouter>
           <Route exact path="/signin" render={() =>
             this.state.currentUser
@@ -143,6 +158,7 @@ class App extends React.Component {
             <Route exact path="/" render={() => <HomePage handleAdultsChange={this.handleAdultsChange} handleSeachButtonClick={this.handleSeachButtonClick} currentUser={this.state.currentUser} cityAndCountry={this.handleCityAndCountry} checkIn={this.handleCheckInChange} checkOut={this.handleCheckOutChange} searchValue={this.handlesearchValueChange} />} />
             <Route exact path="/cardlist" render={() => <CardList refresh={this.refresh} cityCenter={this.getCityCenter} handleAdultsChange={this.handleAdultsChange} adults={this.state.adults} dateDifferenceNumber={this.dateDifferenceNumber} reservationArray={this.handleReservationArray} favoritesArray={this.handleFavoritesArray} handleSeachButtonClick={this.handleSeachButtonClick} currentUser={this.state.currentUser} cityAndCountry={this.handleCityAndCountry} checkIn={this.handleCheckInChange} checkOut={this.handleCheckOutChange} searchValue={this.handlesearchValueChange} resulsArray={this.state.resulsArray} />} />
           </Switch>
+          
         </BrowserRouter>
         
         <Footer/>
