@@ -1,5 +1,5 @@
 # Project title 
-HotelCom
+[HotelCom](https://raptors-hotels.herokuapp.com/)
 ## Table of contents
 * project aim
 * general info
@@ -28,7 +28,7 @@ MERN: MongoDB-ExpressJs-React-Nodejs
 * Inside terminal #2:
     * $cd server
     * $npm i
-    * $npm nodemon server
+    * $npm run start
 ### Features & To Do
 * View hotel of specific area
 * View info of the hotel

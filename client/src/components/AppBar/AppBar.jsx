@@ -12,8 +12,32 @@ class AppBarr extends React.Component {
     constructor() {
         super()
         this.state = {
+            nav: null
         }
     }
+    componentDidMount() {
+        window.addEventListener("scroll", this.handleScroll);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll);
+    }
+    handleScroll = () => {
+        var navbar = document.getElementById("navbar");
+        var sticky = navbar.offsetTop;
+
+        if (window.pageYOffset > sticky) {
+            if (!this.state.nav) {
+                this.setState({ nav: true });
+            }
+        } else {
+            if (this.state.nav) {
+                this.setState({ nav: false });
+            }
+        }
+
+    }
+
     handleLoginClick = (e) => {
         e.preventDefault()
         fetch("/signout")
@@ -21,11 +45,11 @@ class AppBarr extends React.Component {
                 localStorage.removeItem("jwt-auth")
                 localStorage.removeItem("current-user")
                 window.location.reload()
-            })
+            }).catch()
     }
     render() {
         return (
-            <div>
+            <div id="navbar" className={`${this.state.nav && 'sticky' }`}>
                 <div className="NavBar">
                     <AppBar position="static">
                         <Toolbar className="toolBar">
@@ -33,15 +57,22 @@ class AppBarr extends React.Component {
                                 <Typography className="typography mys center" variant="h4">
                                     {/* <img alt='hotelImg' src={hotel} style={{ height: 35, width: 35, marginTop: 20 }} /> */}
                                     <img alt='HotelCom' src={logo} />
+                                    <Button color="inherit">
+                                    Homepage
+                                    </Button>
+                                    
                                 </Typography>
                             </Link>
                             {
                                 this.props.currentUser ?
                                     <div >
                                         <Button color="inherit" onClick={this.handleLoginClick}>
-                                            Log-out
+                                            Signout
                                     </Button>
                                         <Link to='/profile' className="mys">
+                                        <Button color="inherit">
+                                            Profile
+                                    </Button>
                                             <IconButton color='inherit' edge="start" aria-label="menu" size="medium" m={2}>
                                                 <AccountCircleIcon className="Account" />
                                             </IconButton>
@@ -52,12 +83,12 @@ class AppBarr extends React.Component {
                                     <div >
                                         <Button >
                                             <Link to='/signin' className="mys">
-                                                Sign-in
+                                                Signin
                                          </Link>
                                         </Button>
                                         <Button color="inherit">
                                             <Link to='/signin' className="mys">
-                                                Sign-up
+                                                Signup
                                          </Link>
                                         </Button>
                                     </div>

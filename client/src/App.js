@@ -1,13 +1,15 @@
-import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
+
+import UserSign from "./pages/UserSign/UserSign";
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import HomePage from "./pages/homePage/homePage"
-import Profile from "./pages/profile/profile.jsx"
-import CardList from "./components/CardList/cardList"
-import Footer from "./components/Footer/Footer"
+import ResetPassword from "./pages/ResetPassword/ResetPassword.jsx";
+import NewPassword from "./pages/NewPassword/NewPassword.jsx";
+import { showMenu, showSearch } from './actions/actions';
+import CardList from "./components/CardList/cardList";
+import Profile from "./pages/profile/profile.jsx";
+import HomePage from "./pages/homePage/homePage";
 import { connect } from 'react-redux';
-import React from "react"
-import './App.css';
+import React from "react";
+// import './App.css';
 
 
 class App extends React.Component {
@@ -79,6 +81,7 @@ class App extends React.Component {
   }
 
   handleSeachButtonClick = () => {
+    if(this.state.searchValue){
       fetch(`https://hotels4.p.rapidapi.com/locations/search?locale=en_US&query=${this.state.searchValue}`, {
         "method": "GET",
         "headers": {
@@ -93,7 +96,8 @@ class App extends React.Component {
           return response.json()
         })
         .then((data) => {
-          console.log(data)
+          if(data){
+          if(data.suggestions[0].entities[0]){
           this.setState({ cityCenter: data.suggestions[0].entities[0] })
           fetch(`https://hotels4.p.rapidapi.com/properties/list?destinationId=${data.suggestions[0].entities[0].destinationId}&pageNumber=1&checkIn=${this.state.checkIn}&checkOut=${this.state.checkOut}&pageSize=25&adults1=1&currency=USD&locale=en_US&sortOrder=PRICE`, {
             "method": "GET",
@@ -105,7 +109,6 @@ class App extends React.Component {
             }
           })
             .then(response => {
-              console.log(response)
               return response.json()
             })
             .then(data => {
@@ -115,22 +118,29 @@ class App extends React.Component {
             .catch(err => {
               console.error(err);
             });
-        })
+        }else{this.setState({ resulsArray: [{address: {streetAddress: "middle of nowhere", locality: "Nowhere"},
+        coordinate: {lat: 0, lon: 0},
+        name: "No Hotel",
+        guestReviews: {unformattedRating: 0, total: 1},
+        ratePlan: {price: {current: "$0"}},
+        starRating: 0,
+        thumbnailUrl: "https://i.insider.com/562fbe249dd7cc1b008c528d?width=700"
+        }]})}}})
         .catch(err => {
           console.error(err);
-        });
+        });}
   }
 
   componentDidMount() {
     //checking the auth
-      const requestOptions = {
+    if(this.state.currentUser){const requestOptions = {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'jwt-auth': localStorage.getItem('jwt-auth')
       },
     }
-    if(this.state.currentUser){fetch("http://localhost:5000/user/auth", requestOptions)
+    fetch("http://localhost:5000/user/auth", requestOptions)
       .then(res => res.json())
       .then(data => {
         if (data.displayName) localStorage.setItem("current-user", data.displayName)
@@ -140,7 +150,6 @@ class App extends React.Component {
       })}
   }
   render() {
-    console.log(this.state)
     return (
       <div className="maincontainer"> 
       <div className="App">
@@ -149,19 +158,29 @@ class App extends React.Component {
           <Route exact path="/signin" render={() =>
             this.state.currentUser
               ? (<Redirect to='/' />)
-              : (<SignInAndSignUpPage />)} />
+              : (<UserSign />)} />
+          <Route exact path="/signup" render={() =>
+            this.state.currentUser
+              ? (<Redirect to='/' />)
+              : (<UserSign />)} />
           <Route exact path="/profile" render={() =>
             this.state.currentUser
               ? (<Profile adults={this.state.adults} dateDifferenceNumber={this.dateDifferenceNumber} handleSeachButtonClick={this.handleSeachButtonClick} currentUser={this.state.currentUser} cityAndCountry={this.handleCityAndCountry} checkIn={this.handleCheckInChange} checkOut={this.handleCheckOutChange} searchValue={this.handlesearchValueChange} />)
               : (<Redirect to='/' />)} />
           <Switch>
             <Route exact path="/" render={() => <HomePage handleAdultsChange={this.handleAdultsChange} handleSeachButtonClick={this.handleSeachButtonClick} currentUser={this.state.currentUser} cityAndCountry={this.handleCityAndCountry} checkIn={this.handleCheckInChange} checkOut={this.handleCheckOutChange} searchValue={this.handlesearchValueChange} />} />
+
             <Route exact path="/cardlist" render={() => <CardList refresh={this.refresh} cityCenter={this.getCityCenter} handleAdultsChange={this.handleAdultsChange} adults={this.state.adults} dateDifferenceNumber={this.dateDifferenceNumber} reservationArray={this.handleReservationArray} favoritesArray={this.handleFavoritesArray} handleSeachButtonClick={this.handleSeachButtonClick} currentUser={this.state.currentUser} cityAndCountry={this.handleCityAndCountry} checkIn={this.handleCheckInChange} checkOut={this.handleCheckOutChange} searchValue={this.handlesearchValueChange} resulsArray={this.state.resulsArray} />} />
+            <Route path="/forgot-password" component={ResetPassword} />
+
+            <Route path="/reset/:token" component={NewPassword} />
+
+    
           </Switch>
           
         </BrowserRouter>
         
-        <Footer/>
+       
       </div>
       </div>
       
@@ -171,20 +190,18 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    showMenu: state.showMenu
+    // showMenu: state.showMenu
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     // show: (z) => { dispatch(showMenu(z)) },
-    // hide: ( z)=> {dispatch (showSearch(z))}
+    // hide: (z) => { dispatch(showSearch(z)) }
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-
-
 
 //sign-up  sign-in
 //username/password
@@ -208,4 +225,3 @@ export default connect(mapStateToProps, mapDispatchToProps)(App);
 //verify the token==>jwt.verify==>gives me the id of the user(id)
 //User.findOne({_id:id})==>gives me a user
 //send the user as a response to the front-end from the server 
-
