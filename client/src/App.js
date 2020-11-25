@@ -8,7 +8,7 @@ import Footer from "./components/Footer/Footer"
 import { connect } from 'react-redux';
 import React from "react"
 import './App.css';
-import Filter from "./components/Filter/Filter";
+
 
 class App extends React.Component {
   constructor() {
